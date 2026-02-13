@@ -196,15 +196,22 @@ window.addEventListener('resize', placeNoBtnAway);
 
 yesBtn.addEventListener("click", function() {
     document.body.innerHTML = `
-        <div class="success">
+        <div class="success" style="text-align:center; padding:40px;">
             <h1>She Said YESSS 💖🥰</h1>
             <p style="color:white; font-size:1.2rem; margin-top:10px;">
                 You just made me the happiest person alive ❤️
             </p>
             <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif">
+            
+            <br><br>
+            <button onclick="window.location.href='index.html'" 
+                style="padding:10px 20px; font-size:16px; border-radius:20px; border:none; background:white; cursor:pointer;">
+                Go Back 💕
+            </button>
         </div>
     `;
 });
+
 
 /* Floating hearts generator */
 function createHeart() {
@@ -222,4 +229,5 @@ setInterval(createHeart, 400);
 
 </body>
 </html>
+
 
