@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? 💖</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 20px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    max-width: 500px;
+    margin-bottom: 30px;
+}
+
+.gallery img {
+    width: 45%;
+    border-radius: 20px;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transition: transform 0.4s ease;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+    position: relative;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#yesBtn {
+    background: #ff4b7d;
+    color: white;
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+}
+
+#noBtn {
+    background: #444;
+    color: white;
+    position: fixed;
+    z-index: 10;
+    transition: transform 0.15s ease, left 0.15s ease, top 0.15s ease;
+}
+
+.success {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.success img {
+    width: 80%;
+    max-width: 300px;
+    margin-top: 20px;
+    border-radius: 20px;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+/* Floating Hearts */
+.heart {
+    position: fixed;
+    font-size: 20px;
+    animation: floatUp linear infinite;
+    color: white;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* iPhone optimization */
+@media (max-width: 430px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+    .gallery img {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Will You Be My Valentine? 💖</h1>
+
+<div class="gallery">
+    <img src="IMG_5012.jpg">
+    <img src="IMG_1630.jpg">
+    <img src="IMG_5806.jpg">
+    <img src="IMG_8761.jpg">
+</div>
+
+<div class="buttons">
+    <button id="yesBtn">Yes 💕</button>
+    <button id="noBtn">No 😢</button>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+noBtn.addEventListener("mouseover", function() {
+    const yesRect = yesBtn.getBoundingClientRect();
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
+    const margin = 12;
+
+    function isOverlapping(x, y) {
+        return !(x + btnW < yesRect.left - margin || x > yesRect.right + margin || y + btnH < yesRect.top - margin || y > yesRect.bottom + margin);
+    }
+
+    let x, y, tries = 0;
+    do {
+        x = Math.random() * (window.innerWidth - btnW - 10);
+        y = Math.random() * (window.innerHeight - btnH - 10);
+        tries++;
+    } while (isOverlapping(x, y) && tries < 40);
+
+    noBtn.style.left = Math.max(6, Math.min(x, window.innerWidth - btnW - 6)) + "px";
+    noBtn.style.top = Math.max(6, Math.min(y, window.innerHeight - btnH - 6)) + "px";
+});
+
+// Place the No button a little away from the Yes button on load/resize
+function placeNoBtnAway() {
+    const yesRect = yesBtn.getBoundingClientRect();
+    const btnW = noBtn.offsetWidth || 80;
+    const btnH = noBtn.offsetHeight || 36;
+    const margin = 24;
+
+    // try to position to the right, otherwise to the left
+    let x = yesRect.right + margin;
+    if (x + btnW > window.innerWidth - 6) {
+        x = yesRect.left - btnW - margin;
+    }
+
+    // vertical align to yes button, but clamp to viewport
+    let y = yesRect.top;
+    if (y + btnH > window.innerHeight - 6) y = window.innerHeight - btnH - 6;
+    if (y < 6) y = 6;
+
+    // apply
+    noBtn.style.left = Math.max(6, Math.min(x, window.innerWidth - btnW - 6)) + "px";
+    noBtn.style.top = y + "px";
+}
+
+window.addEventListener('load', placeNoBtnAway);
+window.addEventListener('resize', placeNoBtnAway);
+
+yesBtn.addEventListener("click", function() {
+    document.body.innerHTML = `
+        <div class="success">
+            <h1>She Said YESSS 💖🥰</h1>
+            <p style="color:white; font-size:1.2rem; margin-top:10px;">
+                You just made me the happiest person alive ❤️
+            </p>
+            <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif">
+        </div>
+    `;
+});
+
+/* Floating hearts generator */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+}
+
+setInterval(createHeart, 400);
+</script>
+
+</body>
+</html>
